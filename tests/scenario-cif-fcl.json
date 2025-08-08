@@ -1,0 +1,171 @@
+{
+  "descricaoCenario": "Importação Marítima FCL da Alemanha, Incoterm CIF, 2 contêineres",
+  "objetivo": "Testar cálculo para Incoterm CIF (frete e seguro inclusos no preço)",
+  "entrada": {
+    "dadosGerais": {
+      "paisOrigem": "DEU",
+      "ufDesembaraco": "RS",
+      "taxaCambio": 5.35,
+      "aliquotaIcms": 18
+    },
+    "adicoes": [
+      {
+        "id": 1,
+        "ncm": "87032300",
+        "unidadeDeMedida": "UN",
+        "qtd": 20,
+        "valorUnitarioUSD": 15000.00,
+        "pesoUnitarioKg": 1200.0
+      }
+    ],
+    "transporte": {
+      "modal": "Maritimo FCL",
+      "incoterm": "CIF",
+      "freteInternacionalUSD": 8500.00,
+      "seguroContratado": true,
+      "numeroContainers": 2,
+      "metrosCubicos": null
+    },
+    "servicos": {
+      "numeroDesembaracos": 2,
+      "servicosTecnicosUSD": 1000.00,
+      "servicosComerciaisUSD": 500.00,
+      "comissaoAgentePercentual": 1.5
+    }
+  },
+  "dadosNCMSimulados": {
+    "87032300": {
+      "aliquotas": {
+        "ii": 35.0,
+        "ipi": 25.0,
+        "pis": 2.1,
+        "cofins": 9.65
+      },
+      "tratamentosAdministrativos": [
+        {
+          "orgao": "DENATRAN",
+          "tipo": "LICENCA_IMPORTACAO",
+          "informacoes": "Licença para importação de veículos automotores."
+        }
+      ],
+      "unidadeEstatistica": "UN",
+      "descricao": "Automóveis com motor a pistão, cilindrada > 1500cm³ e ≤ 3000cm³"
+    }
+  },
+  "calculosEsperados": {
+    "valorTotalMercadoriasUSD": 300000.00,
+    "pesoTotalKg": 24000.00,
+    "seguroInternacionalUSD": 0.00,
+    "valorAduaneiroUSD": 300000.00,
+    "valorAduaneiroBRL": 1605000.00,
+    "despesasOperacionais": [
+      {
+        "id": "desp_taxa_siscomex",
+        "valorSugeridoBRL": 155.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_afrmm",
+        "valorSugeridoBRL": 3638.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_armazenagem_fcl",
+        "valorSugeridoBRL": 3600.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_coleta_fcl",
+        "valorSugeridoBRL": 8400.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_desembaraco_aduaneiro",
+        "valorSugeridoBRL": 2500.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_liberacao_bl",
+        "valorSugeridoBRL": 4200.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_servicos_tecnicos",
+        "valorSugeridoBRL": 5350.00,
+        "entraBaseICMS": false
+      },
+      {
+        "id": "desp_custos_comerciais",
+        "valorSugeridoBRL": 2675.00,
+        "entraBaseICMS": false
+      },
+      {
+        "id": "desp_comissao_agente",
+        "valorSugeridoBRL": 24075.00,
+        "entraBaseICMS": false
+      }
+    ],
+    "totalDespesasParaICMS": 22493.00,
+    "totalDespesasOperacionais": 54593.00,
+    "sequenciasAdicao": [
+      {
+        "ncm": "87032300",
+        "valorSequenciaUSD": 300000.00,
+        "percentualSequencia": 1.0000,
+        "valorAduaneiroSequenciaBRL": 1605000.00,
+        "despesasSequenciaBRL": 22493.00,
+        "tributos": {
+          "ii": 561750.00,
+          "ipi": 541687.50,
+          "pis": 33705.00,
+          "cofins": 154882.50,
+          "icms": 571882.44
+        }
+      }
+    ],
+    "totalTributosBRL": 1863907.44,
+    "custoMercadoriaBRL": 1605000.00,
+    "custoTotalProjeto": 3523500.44
+  },
+  "validacoes": [
+    {
+      "campo": "valorAduaneiroBRL",
+      "formula": "300000 * 5.35",
+      "valorEsperado": 1605000.00,
+      "observacao": "CIF: frete e seguro já inclusos, VA = apenas valor da mercadoria"
+    },
+    {
+      "campo": "seguroInternacionalUSD",
+      "formula": "0 (já incluso no CIF)",
+      "valorEsperado": 0.00,
+      "observacao": "CIF: seguro já está incluso no valor da mercadoria"
+    },
+    {
+      "campo": "ii",
+      "formula": "1605000 * 0.35",
+      "valorEsperado": 561750.00,
+      "observacao": "Alíquota alta para veículos (35%)"
+    },
+    {
+      "campo": "ipi",
+      "formula": "(1605000 + 561750) * 0.25",
+      "valorEsperado": 541687.50,
+      "observacao": "IPI sobre VA + II"
+    },
+    {
+      "campo": "desp_afrmm",
+      "formula": "8500 * 5.35 * 0.08",
+      "valorEsperado": 3638.00,
+      "observacao": "AFRMM sobre o frete informado (mesmo sendo CIF)"
+    }
+  ],
+  "observacoes": [
+    "CIF: frete e seguro já inclusos no valor da mercadoria",
+    "Valor Aduaneiro = apenas valor da mercadoria",
+    "AFRMM ainda é calculado sobre o frete informado",
+    "Alíquotas altas para veículos (II: 35%, IPI: 25%)",
+    "2 desembaraços = dobra custos de desembaraço e liberação de BL",
+    "Comissão e serviços não entram na base de ICMS"
+  ]
+}
+

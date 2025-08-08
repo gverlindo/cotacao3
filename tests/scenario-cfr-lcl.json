@@ -1,0 +1,180 @@
+{
+  "descricaoCenario": "Importação Marítima LCL da China, Incoterm CFR, 15 metros cúbicos",
+  "objetivo": "Testar cálculo para modal marítimo LCL com Incoterm CFR (frete incluso)",
+  "entrada": {
+    "dadosGerais": {
+      "paisOrigem": "CHN",
+      "ufDesembaraco": "SP",
+      "taxaCambio": 5.30,
+      "aliquotaIcms": 18
+    },
+    "adicoes": [
+      {
+        "id": 1,
+        "ncm": "90065300",
+        "unidadeDeMedida": "UN",
+        "qtd": 50,
+        "valorUnitarioUSD": 400.00,
+        "pesoUnitarioKg": 0.8
+      },
+      {
+        "id": 2,
+        "ncm": "85171231",
+        "unidadeDeMedida": "UN",
+        "qtd": 200,
+        "valorUnitarioUSD": 120.00,
+        "pesoUnitarioKg": 0.15
+      }
+    ],
+    "transporte": {
+      "modal": "Maritimo LCL",
+      "incoterm": "CFR",
+      "freteInternacionalUSD": 2800.00,
+      "seguroContratado": true,
+      "numeroContainers": null,
+      "metrosCubicos": 15
+    },
+    "servicos": {
+      "numeroDesembaracos": 1,
+      "servicosTecnicosUSD": 300.00,
+      "servicosComerciaisUSD": 0,
+      "comissaoAgentePercentual": 2.5
+    }
+  },
+  "dadosNCMSimulados": {
+    "90065300": {
+      "aliquotas": {
+        "ii": 12.0,
+        "ipi": 10.0,
+        "pis": 1.65,
+        "cofins": 7.6
+      },
+      "tratamentosAdministrativos": [],
+      "unidadeEstatistica": "UN",
+      "descricao": "Câmeras fotográficas digitais"
+    },
+    "85171231": {
+      "aliquotas": {
+        "ii": 16.0,
+        "ipi": 15.0,
+        "pis": 2.1,
+        "cofins": 9.65
+      },
+      "tratamentosAdministrativos": [
+        {
+          "orgao": "ANATEL",
+          "tipo": "LICENCA_IMPORTACAO",
+          "informacoes": "Exigível para homologação de equipamentos de telecomunicações."
+        }
+      ],
+      "unidadeEstatistica": "UN",
+      "descricao": "Telefones celulares"
+    }
+  },
+  "calculosEsperados": {
+    "valorTotalMercadoriasUSD": 44000.00,
+    "pesoTotalKg": 70.00,
+    "seguroInternacionalUSD": 132.00,
+    "valorAduaneiroUSD": 44132.00,
+    "valorAduaneiroBRL": 233899.60,
+    "despesasOperacionais": [
+      {
+        "id": "desp_taxa_siscomex",
+        "valorSugeridoBRL": 310.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_afrmm",
+        "valorSugeridoBRL": 1185.60,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_custos_lcl",
+        "valorSugeridoBRL": 84000.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_desembaraco_aduaneiro",
+        "valorSugeridoBRL": 1250.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_servicos_tecnicos",
+        "valorSugeridoBRL": 1590.00,
+        "entraBaseICMS": false
+      },
+      {
+        "id": "desp_comissao_agente",
+        "valorSugeridoBRL": 5830.00,
+        "entraBaseICMS": false
+      }
+    ],
+    "totalDespesasParaICMS": 86745.60,
+    "totalDespesasOperacionais": 94165.60,
+    "sequenciasAdicao": [
+      {
+        "ncm": "90065300",
+        "valorSequenciaUSD": 20000.00,
+        "percentualSequencia": 0.4545,
+        "valorAduaneiroSequenciaBRL": 106318.00,
+        "despesasSequenciaBRL": 39429.82,
+        "tributos": {
+          "ii": 12758.16,
+          "ipi": 11907.62,
+          "pis": 1754.25,
+          "cofins": 8080.37,
+          "icms": 32374.84
+        }
+      },
+      {
+        "ncm": "85171231",
+        "valorSequenciaUSD": 24000.00,
+        "percentualSequencia": 0.5455,
+        "valorAduaneiroSequenciaBRL": 127581.60,
+        "despesasSequenciaBRL": 47315.78,
+        "tributos": {
+          "ii": 20413.06,
+          "ipi": 22199.20,
+          "pis": 2679.21,
+          "cofins": 12311.64,
+          "icms": 46723.05
+        }
+      }
+    ],
+    "totalTributosBRL": 170201.40,
+    "custoMercadoriaBRL": 233200.00,
+    "custoTotalProjeto": 497567.00
+  },
+  "validacoes": [
+    {
+      "campo": "valorAduaneiroBRL",
+      "formula": "(44000 + 132) * 5.30",
+      "valorEsperado": 233899.60,
+      "observacao": "CFR: frete já incluso no valor da mercadoria, soma apenas o seguro"
+    },
+    {
+      "campo": "seguroInternacionalUSD",
+      "formula": "44000 * 0.003",
+      "valorEsperado": 132.00,
+      "observacao": "CFR: seguro calculado apenas sobre o valor da mercadoria"
+    },
+    {
+      "campo": "percentualSequencia_90065300",
+      "formula": "20000 / 44000",
+      "valorEsperado": 0.4545
+    },
+    {
+      "campo": "percentualSequencia_85171231",
+      "formula": "24000 / 44000",
+      "valorEsperado": 0.5455
+    }
+  ],
+  "observacoes": [
+    "Este cenário testa múltiplas NCMs com diferentes alíquotas",
+    "Incoterm CFR: frete incluso, seguro calculado apenas sobre mercadoria",
+    "Modal LCL: usa custos por metro cúbico em vez de por contêiner",
+    "Comissão e serviços técnicos não entram na base de ICMS",
+    "Rateio proporcional entre duas sequências de adição"
+  ]
+}
+

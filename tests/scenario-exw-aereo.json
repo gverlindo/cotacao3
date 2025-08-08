@@ -1,0 +1,152 @@
+{
+  "descricaoCenario": "Importação Aérea dos EUA, Incoterm EXW, sem seguro",
+  "objetivo": "Testar cálculo para modal aéreo com Incoterm EXW e opção sem seguro",
+  "entrada": {
+    "dadosGerais": {
+      "paisOrigem": "USA",
+      "ufDesembaraco": "RJ",
+      "taxaCambio": 5.60,
+      "aliquotaIcms": 20
+    },
+    "adicoes": [
+      {
+        "id": 1,
+        "ncm": "84713000",
+        "unidadeDeMedida": "UN",
+        "qtd": 5,
+        "valorUnitarioUSD": 2500.00,
+        "pesoUnitarioKg": 15.0
+      }
+    ],
+    "transporte": {
+      "modal": "Aereo",
+      "incoterm": "EXW",
+      "freteInternacionalUSD": 1800.00,
+      "seguroContratado": false,
+      "numeroContainers": null,
+      "metrosCubicos": null
+    },
+    "servicos": {
+      "numeroDesembaracos": 1,
+      "servicosTecnicosUSD": 500.00,
+      "servicosComerciaisUSD": 200.00,
+      "comissaoAgentePercentual": 3.0
+    }
+  },
+  "dadosNCMSimulados": {
+    "84713000": {
+      "aliquotas": {
+        "ii": 14.0,
+        "ipi": 5.0,
+        "pis": 1.65,
+        "cofins": 7.6
+      },
+      "tratamentosAdministrativos": [],
+      "unidadeEstatistica": "UN",
+      "descricao": "Máquinas automáticas para processamento de dados, portáteis"
+    }
+  },
+  "calculosEsperados": {
+    "valorTotalMercadoriasUSD": 12500.00,
+    "pesoTotalKg": 75.00,
+    "seguroInternacionalUSD": 0.00,
+    "valorAduaneiroUSD": 14300.00,
+    "valorAduaneiroBRL": 80080.00,
+    "despesasOperacionais": [
+      {
+        "id": "desp_taxa_siscomex",
+        "valorSugeridoBRL": 155.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_coleta_aereo",
+        "valorSugeridoBRL": 150.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_custos_air",
+        "valorSugeridoBRL": 1500.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_desembaraco_aduaneiro",
+        "valorSugeridoBRL": 1250.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_servicos_tecnicos",
+        "valorSugeridoBRL": 2800.00,
+        "entraBaseICMS": false
+      },
+      {
+        "id": "desp_custos_comerciais",
+        "valorSugeridoBRL": 1120.00,
+        "entraBaseICMS": false
+      },
+      {
+        "id": "desp_comissao_agente",
+        "valorSugeridoBRL": 2100.00,
+        "entraBaseICMS": false
+      }
+    ],
+    "totalDespesasParaICMS": 3055.00,
+    "totalDespesasOperacionais": 9075.00,
+    "sequenciasAdicao": [
+      {
+        "ncm": "84713000",
+        "valorSequenciaUSD": 12500.00,
+        "percentualSequencia": 1.0000,
+        "valorAduaneiroSequenciaBRL": 80080.00,
+        "despesasSequenciaBRL": 3055.00,
+        "tributos": {
+          "ii": 11211.20,
+          "ipi": 4564.56,
+          "pis": 1321.32,
+          "cofins": 6086.08,
+          "icms": 21263.63
+        }
+      }
+    ],
+    "totalTributosBRL": 44446.79,
+    "custoMercadoriaBRL": 70000.00,
+    "custoTotalProjeto": 123521.79
+  },
+  "validacoes": [
+    {
+      "campo": "valorAduaneiroBRL",
+      "formula": "(12500 + 1800 + 0) * 5.60",
+      "valorEsperado": 80080.00,
+      "observacao": "EXW sem seguro: VA = mercadoria + frete"
+    },
+    {
+      "campo": "seguroInternacionalUSD",
+      "formula": "0 (seguroContratado = false)",
+      "valorEsperado": 0.00,
+      "observacao": "Usuário optou por não contratar seguro"
+    },
+    {
+      "campo": "desp_coleta_aereo",
+      "formula": "75 kg * R$ 2,00",
+      "valorEsperado": 150.00
+    },
+    {
+      "campo": "desp_custos_air",
+      "formula": "75 kg * R$ 20,00",
+      "valorEsperado": 1500.00
+    },
+    {
+      "campo": "desp_comissao_agente",
+      "formula": "12500 * 0.03 * 5.60",
+      "valorEsperado": 2100.00,
+      "observacao": "3% sobre valor das mercadorias, não entra na base de ICMS"
+    }
+  ],
+  "observacoes": [
+    "Modal aéreo: usa custos por kg em vez de por contêiner",
+    "EXW sem seguro: apenas mercadoria + frete compõem o VA",
+    "Comissão, serviços técnicos e comerciais não entram na base de ICMS",
+    "ICMS do RJ: 20% (maior alíquota entre os estados)",
+    "Apenas uma NCM, então percentual de sequência = 100%"
+  ]
+}
+

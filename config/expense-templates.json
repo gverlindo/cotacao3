@@ -1,0 +1,99 @@
+[
+  {
+    "id": "desp_taxa_siscomex",
+    "descricao": "Taxa Siscomex",
+    "regraCalculo": "(s) => 155 * new Set(s.adicoes.map(a => a.ncm)).size",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => true",
+    "observacoes": "R$ 155,00 por NCM única na operação"
+  },
+  {
+    "id": "desp_afrmm",
+    "descricao": "AFRMM - Marinha Mercante",
+    "regraCalculo": "(s) => (s.transporte.freteInternacionalUSD * s.dadosGerais.taxaCambio) * 0.08",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal.includes('Maritimo')",
+    "observacoes": "8% sobre o valor do frete internacional em BRL - Apenas modal marítimo"
+  },
+  {
+    "id": "desp_armazenagem_fcl",
+    "descricao": "Armazenamento Portuário",
+    "regraCalculo": "(s) => 1800 * s.transporte.numeroContainers",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Maritimo FCL'",
+    "observacoes": "R$ 1.800,00 por contêiner - Apenas FCL"
+  },
+  {
+    "id": "desp_coleta_fcl",
+    "descricao": "Coleta/Desmontagem/Descarregamento/Carregamento/Armazenamento",
+    "regraCalculo": "(s) => 4200 * s.transporte.numeroContainers",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Maritimo FCL'",
+    "observacoes": "R$ 4.200,00 por contêiner - Apenas FCL"
+  },
+  {
+    "id": "desp_coleta_aereo",
+    "descricao": "Coleta/Desmontagem/Descarregamento/Carregamento/Armazenamento",
+    "regraCalculo": "(s) => s.adicoes.reduce((acc, a) => acc + (a.qtd * a.pesoUnitarioKg), 0) * 2",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Aereo'",
+    "observacoes": "R$ 2,00 por kg total da carga - Apenas aéreo"
+  },
+  {
+    "id": "desp_desembaraco_aduaneiro",
+    "descricao": "Serviço de Desembaraço Aduaneiro",
+    "regraCalculo": "(s) => 1250 * s.servicos.numeroDesembaracos",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => true",
+    "observacoes": "R$ 1.250,00 por serviço de desembaraço - Todos os modais"
+  },
+  {
+    "id": "desp_liberacao_bl",
+    "descricao": "Fundos de Liberação de BL",
+    "regraCalculo": "(s) => 2100 * s.servicos.numeroDesembaracos",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Maritimo FCL'",
+    "observacoes": "R$ 2.100,00 por serviço de desembaraço - Apenas FCL"
+  },
+  {
+    "id": "desp_comissao_agente",
+    "descricao": "Comissão de Agente de Compras",
+    "regraCalculo": "(s) => s.adicoes.reduce((acc, a) => acc + (a.qtd * a.valorUnitarioUSD), 0) * (s.servicos.comissaoAgentePercentual / 100) * s.dadosGerais.taxaCambio",
+    "entraBaseICMS": false,
+    "condicaoAplicacao": "(s) => s.servicos.comissaoAgentePercentual > 0",
+    "observacoes": "Percentual sobre o valor total das mercadorias - Não entra na base de ICMS"
+  },
+  {
+    "id": "desp_custos_lcl",
+    "descricao": "Custos LCL",
+    "regraCalculo": "(s) => s.transporte.metrosCubicos * 5600",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Maritimo LCL'",
+    "observacoes": "R$ 5.600,00 por metro cúbico - Apenas LCL"
+  },
+  {
+    "id": "desp_custos_air",
+    "descricao": "Custos AIR",
+    "regraCalculo": "(s) => s.adicoes.reduce((acc, a) => acc + (a.qtd * a.pesoUnitarioKg), 0) * 20",
+    "entraBaseICMS": true,
+    "condicaoAplicacao": "(s) => s.transporte.modal === 'Aereo'",
+    "observacoes": "R$ 20,00 por kg total da carga - Apenas aéreo"
+  },
+  {
+    "id": "desp_servicos_tecnicos",
+    "descricao": "Serviços Técnicos",
+    "regraCalculo": "(s) => s.servicos.servicosTecnicosUSD * s.dadosGerais.taxaCambio",
+    "entraBaseICMS": false,
+    "condicaoAplicacao": "(s) => s.servicos.servicosTecnicosUSD > 0",
+    "observacoes": "Valor lançado pelo operador em USD convertido para BRL - Não entra na base de ICMS"
+  },
+  {
+    "id": "desp_custos_comerciais",
+    "descricao": "Custos Comerciais Extras",
+    "regraCalculo": "(s) => s.servicos.servicosComerciaisUSD * s.dadosGerais.taxaCambio",
+    "entraBaseICMS": false,
+    "condicaoAplicacao": "(s) => s.servicos.servicosComerciaisUSD > 0",
+    "observacoes": "Valor lançado pelo operador em USD convertido para BRL - Não entra na base de ICMS"
+  }
+]
+

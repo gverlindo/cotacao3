@@ -1,0 +1,97 @@
+{
+  "taxaSeguro": {
+    "valor": 0.003,
+    "descricao": "Taxa padrão de seguro internacional (0.30%)",
+    "observacoes": "Aplicada sobre a base de cálculo que varia conforme o Incoterm"
+  },
+  "fatorPesoContainer": {
+    "valor": 22000,
+    "descricao": "Peso estimado em kg que cabe em um contêiner FCL",
+    "observacoes": "Usado para calcular estimativa de frete marítimo baseado no custo por kg do ComexStat"
+  },
+  "fatorFreteMaritimo": {
+    "valor": 0.15,
+    "descricao": "Percentual estimado do frete marítimo sobre o valor FOB (15%)",
+    "observacoes": "Aplicado sobre o valor FOB estimado de um contêiner para calcular o frete"
+  },
+  "fatorFreteAereo": {
+    "valor": 0.25,
+    "descricao": "Percentual estimado do frete aéreo sobre o valor FOB (25%)",
+    "observacoes": "Aplicado sobre o valor FOB da carga para calcular o frete aéreo"
+  },
+  "aliquotasPadrao": {
+    "ii": 10.0,
+    "ipi": 5.0,
+    "pis": 1.65,
+    "cofins": 7.6,
+    "descricao": "Alíquotas padrão usadas quando a API do Portal Único não está disponível",
+    "observacoes": "Valores conservadores para garantir continuidade do sistema"
+  },
+  "aliquotasICMSPorUF": {
+    "AC": 17,
+    "AL": 17,
+    "AP": 18,
+    "AM": 18,
+    "BA": 18,
+    "CE": 18,
+    "DF": 18,
+    "ES": 17,
+    "GO": 17,
+    "MA": 18,
+    "MT": 17,
+    "MS": 17,
+    "MG": 18,
+    "PA": 17,
+    "PB": 18,
+    "PR": 18,
+    "PE": 18,
+    "PI": 18,
+    "RJ": 20,
+    "RN": 18,
+    "RS": 18,
+    "RO": 17.5,
+    "RR": 17,
+    "SC": 17,
+    "SP": 18,
+    "SE": 18,
+    "TO": 18,
+    "descricao": "Alíquotas padrão de ICMS por UF",
+    "observacoes": "Valores podem variar conforme legislação estadual específica"
+  },
+  "timeouts": {
+    "apiPortalUnico": 15000,
+    "apiComexStat": 20000,
+    "apiDuimp": 30000,
+    "descricao": "Timeouts em milissegundos para chamadas às APIs externas"
+  },
+  "cache": {
+    "ttlNCM": 86400000,
+    "ttlFrete": 3600000,
+    "descricao": "Time-to-live do cache em milissegundos (NCM: 24h, Frete: 1h)"
+  },
+  "validacao": {
+    "ncmRegex": "^\\d{8}$",
+    "paisCodigoRegex": "^[A-Z]{3}$",
+    "ufRegex": "^[A-Z]{2}$",
+    "descricao": "Expressões regulares para validação de dados de entrada"
+  },
+  "limites": {
+    "maxAdicoes": 100,
+    "maxContainers": 50,
+    "maxMetrosCubicos": 1000,
+    "maxPesoKg": 50000,
+    "descricao": "Limites máximos para validação de entrada"
+  },
+  "precisao": {
+    "casasDecimaisMonetario": 2,
+    "casasDecimaisPercentual": 4,
+    "casasDecimaisPeso": 3,
+    "descricao": "Precisão para arredondamento de valores"
+  },
+  "versao": {
+    "config": "1.0.0",
+    "dataAtualizacao": "2025-01-08",
+    "descricao": "Versão dos parâmetros de configuração"
+  }
+}
+

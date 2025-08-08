@@ -1,0 +1,149 @@
+{
+  "descricaoCenario": "Importação Marítima FCL da China, Incoterm FOB, 1 contêiner",
+  "objetivo": "Testar cálculo completo para modal marítimo FCL com Incoterm FOB",
+  "entrada": {
+    "dadosGerais": {
+      "paisOrigem": "CHN",
+      "ufDesembaraco": "SC",
+      "taxaCambio": 5.45,
+      "aliquotaIcms": 17
+    },
+    "adicoes": [
+      {
+        "id": 1,
+        "ncm": "85171231",
+        "unidadeDeMedida": "UN",
+        "qtd": 1000,
+        "valorUnitarioUSD": 150.00,
+        "pesoUnitarioKg": 0.2
+      }
+    ],
+    "transporte": {
+      "modal": "Maritimo FCL",
+      "incoterm": "FOB",
+      "freteInternacionalUSD": 3500.00,
+      "seguroContratado": true,
+      "numeroContainers": 1,
+      "metrosCubicos": null
+    },
+    "servicos": {
+      "numeroDesembaracos": 1,
+      "servicosTecnicosUSD": 0,
+      "servicosComerciaisUSD": 0,
+      "comissaoAgentePercentual": 0
+    }
+  },
+  "dadosNCMSimulados": {
+    "85171231": {
+      "aliquotas": {
+        "ii": 16.0,
+        "ipi": 15.0,
+        "pis": 2.1,
+        "cofins": 9.65
+      },
+      "tratamentosAdministrativos": [
+        {
+          "orgao": "ANATEL",
+          "tipo": "LICENCA_IMPORTACAO",
+          "informacoes": "Exigível para homologação de equipamentos de telecomunicações."
+        }
+      ],
+      "unidadeEstatistica": "UN",
+      "descricao": "Telefones celulares"
+    }
+  },
+  "calculosEsperados": {
+    "valorTotalMercadoriasUSD": 150000.00,
+    "pesoTotalKg": 200.00,
+    "seguroInternacionalUSD": 460.50,
+    "valorAduaneiroUSD": 153960.50,
+    "valorAduaneiroBRL": 839084.73,
+    "despesasOperacionais": [
+      {
+        "id": "desp_taxa_siscomex",
+        "valorSugeridoBRL": 155.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_afrmm",
+        "valorSugeridoBRL": 1522.50,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_armazenagem_fcl",
+        "valorSugeridoBRL": 1800.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_coleta_fcl",
+        "valorSugeridoBRL": 4200.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_desembaraco_aduaneiro",
+        "valorSugeridoBRL": 1250.00,
+        "entraBaseICMS": true
+      },
+      {
+        "id": "desp_liberacao_bl",
+        "valorSugeridoBRL": 2100.00,
+        "entraBaseICMS": true
+      }
+    ],
+    "totalDespesasParaICMS": 11027.50,
+    "totalDespesasOperacionais": 11027.50,
+    "sequenciasAdicao": [
+      {
+        "ncm": "85171231",
+        "valorSequenciaUSD": 150000.00,
+        "percentualSequencia": 1.0000,
+        "valorAduaneiroSequenciaBRL": 839084.73,
+        "despesasSequenciaBRL": 11027.50,
+        "tributos": {
+          "ii": 134253.56,
+          "ipi": 145900.59,
+          "pis": 17620.78,
+          "cofins": 80971.18,
+          "icms": 208738.44
+        }
+      }
+    ],
+    "totalTributosBRL": 587484.55,
+    "custoMercadoriaBRL": 817500.00,
+    "custoTotalProjeto": 1416012.05
+  },
+  "validacoes": [
+    {
+      "campo": "valorAduaneiroBRL",
+      "formula": "(150000 + 3500 + 460.50) * 5.45",
+      "valorEsperado": 839084.73
+    },
+    {
+      "campo": "ii",
+      "formula": "839084.73 * 0.16",
+      "valorEsperado": 134253.56
+    },
+    {
+      "campo": "ipi",
+      "formula": "(839084.73 + 134253.56) * 0.15",
+      "valorEsperado": 145900.59
+    },
+    {
+      "campo": "baseICMS",
+      "formula": "839084.73 + 134253.56 + 145900.59 + 17620.78 + 80971.18 + 11027.50",
+      "valorEsperado": 1228858.34
+    },
+    {
+      "campo": "icms",
+      "formula": "(1228858.34 * 0.17) / (1 - 0.17)",
+      "valorEsperado": 251648.44
+    }
+  ],
+  "observacoes": [
+    "Este cenário testa o fluxo completo para FCL com todas as despesas aplicáveis",
+    "O seguro é calculado sobre mercadoria + frete (FOB)",
+    "Todas as despesas entram na base de ICMS",
+    "ICMS é calculado 'por dentro' com alíquota de 17%"
+  ]
+}
+
